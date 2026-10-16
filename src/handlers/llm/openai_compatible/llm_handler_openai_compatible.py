@@ -104,7 +104,7 @@ class HandlerLLM(HandlerBase, ABC):
             # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
             api_key=context.api_key,
             base_url=context.api_url,
-            timeout=5.0,  # 30秒超时，避免 API 无响应时阻塞整个系统
+            timeout=30.0,  # 30秒超时，避免 API 无响应时阻塞整个系统
         )
         return context
     

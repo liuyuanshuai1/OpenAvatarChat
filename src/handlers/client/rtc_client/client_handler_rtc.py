@@ -1,4 +1,5 @@
 import asyncio
+from handlers.client.rtc_client.thread_safe_queue import ThreadSafeAsyncQueue
 import json
 from typing import Dict, Optional, cast, Union, Tuple
 from uuid import uuid4
@@ -15,6 +16,7 @@ from fastapi import FastAPI
 # ============================================================================
 from aiortc.codecs import CODECS, h264
 from aiortc import codecs as aiortc_codecs
+from aiortc.exceptions import InvalidStateError
 import av
 import fractions
 
@@ -58,7 +60,6 @@ def _configure_h264_hardware_encoding():
             if encoder in encoder_options:
                 test_codec.options = encoder_options[encoder]
             test_codec.open()
-            test_codec.close()
             _selected_h264_encoder = encoder
             logger.info(f"Detected H.264 hardware encoder: {encoder}")
             break
@@ -70,10 +71,44 @@ def _configure_h264_hardware_encoding():
 
     def patched_encode_frame(self, frame, force_keyframe):
         global _selected_h264_encoder, _actual_h264_encoder
+        current_encoder = getattr(
+            self, "_preferred_encoder", _selected_h264_encoder
+        )
+
+        resolution_changed = bool(
+            self.codec and (
+                frame.width != self.codec.width
+                or frame.height != self.codec.height
+            )
+        )
+
+        bitrate_changed = bool(
+            self.codec
+            and self.codec.bit_rate
+            and abs(self.target_bitrate - self.codec.bit_rate)
+                / self.codec.bit_rate > 0.1
+        )
+
         if self.codec and (
-            frame.width != self.codec.width or frame.height != self.codec.height
-            or abs(self.target_bitrate - self.codec.bit_rate) / self.codec.bit_rate > 0.1
+            resolution_changed
+            or (
+                current_encoder != "h264_nvenc"
+                and bitrate_changed
+            )
         ):
+            logger.info(
+                f"H.264 encoder reset: encoder={current_encoder}, "
+                f"resolution_changed={resolution_changed}, "
+                f"bitrate_changed={bitrate_changed}, "
+                f"target_bitrate={self.target_bitrate}, "
+                f"codec_bitrate={self.codec.bit_rate}"
+            )
+
+            try:
+                self.codec.close()
+            except Exception:
+                pass
+
             self.buffer_data = b""
             self.buffer_pts = None
             self.codec = None
@@ -255,10 +290,12 @@ class RtcClientSessionDelegate(ClientSessionDelegate):
         self.data_submitter = None
         self.signal_emitter = None
         self.shared_states = None
+        self.video_fps = 25
+        self.queue_timeouts = {"audio": 0, "video": 0, "text": 0}
         self.output_queues = {
-            EngineChannelType.AUDIO: asyncio.Queue(),
-            EngineChannelType.VIDEO: asyncio.Queue(),
-            EngineChannelType.TEXT: asyncio.Queue(),
+            EngineChannelType.AUDIO: ThreadSafeAsyncQueue(self._audio_duration),
+            EngineChannelType.VIDEO: ThreadSafeAsyncQueue(self._video_duration),
+            EngineChannelType.TEXT: ThreadSafeAsyncQueue(),
         }
         self.input_data_definitions: Dict[EngineChannelType, DataBundleDefinition] = {}
         self.modality_mapping = {
@@ -275,10 +312,29 @@ class RtcClientSessionDelegate(ClientSessionDelegate):
             try:
                 data = await asyncio.wait_for(data_queue.get(), timeout)
             except asyncio.TimeoutError:
+                self.queue_timeouts[modality.value] += 1
                 return None
         else:
             data = await data_queue.get()
         return data
+
+    @staticmethod
+    def _audio_duration(item):
+        if getattr(item, "data", None) is None:
+            return 0.0
+        array = item.data.get_main_data()
+        rate = item.data.get_main_definition_entry().sample_rate
+        return array.shape[-1] / rate if array is not None and rate else 0.0
+
+    def _video_duration(self, item):
+        if getattr(item, "data", None) is None:
+            return 0.0
+        array = item.data.get_main_data()
+        return (array.shape[0] if array is not None and array.ndim == 4 else 1) / self.video_fps
+
+    def media_metrics(self):
+        return dict(queues={kind.value: q.snapshot() for kind, q in self.output_queues.items()},
+                    timeouts=dict(self.queue_timeouts))
 
     def put_data(self, modality: EngineChannelType, data: Union[np.ndarray, str],
                  timestamp: Optional[Tuple[int, int]] = None, samplerate: Optional[int] = None, loopback: bool = False):
@@ -322,8 +378,7 @@ class RtcClientSessionDelegate(ClientSessionDelegate):
 
     def clear_data(self):
         for data_queue in self.output_queues.values():
-            while not data_queue.empty():
-                data_queue.get_nowait()
+            data_queue.clear()
 
 
 class ClientRtcConfigModel(HandlerBaseConfigModel, BaseModel):
@@ -461,6 +516,7 @@ class ClientHandlerRtc(ClientHandlerBase):
         session_delegate.signal_emitter = handler_context.signal_emitter
         session_delegate.input_data_definitions = self.output_bundle_definitions
         session_delegate.shared_states = session_context.shared_states
+        session_delegate.video_fps = handler_context.config.output_video_fps
 
         handler_context.client_session_delegate = session_delegate
 
@@ -518,16 +574,26 @@ class ClientHandlerRtc(ClientHandlerBase):
         if stream is None or stream.chat_channel is None:
             return False
         payload = json.dumps(serialize_message(message))
+        channel = stream.chat_channel
+
+        def send_if_open():
+            if stream.chat_channel is not channel or channel.readyState != "open":
+                return False
+            try:
+                channel.send(payload)
+                return True
+            except (RuntimeError, OSError, InvalidStateError) as exc:
+                logger.debug(f"Chat channel closed during send for {session_id}: {exc}")
+                return False
+
         loop = getattr(stream, "chat_channel_loop", None)
         if loop is not None and loop.is_running():
-            loop.call_soon_threadsafe(stream.chat_channel.send, payload)
-            return True
-        try:
-            stream.chat_channel.send(payload)
-            return True
-        except RuntimeError as e:
-            logger.warning(f"Failed to send chat channel message for session {session_id}: {e}")
-            return False
+            try:
+                loop.call_soon_threadsafe(send_if_open)
+                return True  # Scheduled, not a delivery acknowledgement.
+            except RuntimeError:
+                return False
+        return send_if_open()
 
     def _send_text_to_chat_channel(self, context: ClientRtcContext, inputs: ChatData) -> bool:
         stream_key_str = inputs.stream_id.stream_key_str if inputs.stream_id else None
@@ -593,9 +659,12 @@ class ClientHandlerRtc(ClientHandlerBase):
                 signal_payload.stream_key = signal.related_stream.stream_key_str
 
             if signal.type == ChatSignalType.STREAM_CANCEL:
+                if context.client_session_delegate is not None:
+                    context.client_session_delegate.clear_data()
                 current_stream = context.stream_manager.find_stream(signal.related_stream)
                 signal_payload.parent_stream_keys = [
-                    stream.stream_key_str for stream in current_stream.ancestor_streams]
+                    stream.stream_key_str for stream in current_stream.ancestor_streams
+                ] if current_stream is not None else []
 
             message = ChatSignalMessage(
                 header=MessageHeader(name=MessageType.CHAT_SIGNAL, request_id=str(uuid4())),
