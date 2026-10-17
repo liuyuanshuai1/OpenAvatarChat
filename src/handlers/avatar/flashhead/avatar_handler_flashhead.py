@@ -334,6 +334,7 @@ class HandlerAvatarFlashHead(HandlerBase):
         )
         context.output_data_definitions = self.output_data_definitions
         context.config = handler_config
+        processor.input_queue_provider = lambda: getattr(context, "diagnostic_input_queue", None)
 
         callbacks = context._build_callbacks()
         processor.set_callbacks(callbacks)

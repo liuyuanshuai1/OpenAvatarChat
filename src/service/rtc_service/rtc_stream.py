@@ -67,6 +67,7 @@ class RtcStream(AsyncAudioVideoStreamHandler):
         self.chat_channel = None
         self.chat_channel_loop = None
         self.first_audio_emitted = False
+        self._last_media_metrics = 0.0
 
         self.quit = asyncio.Event()
         self.last_frame_time = 0
@@ -172,6 +173,7 @@ class RtcStream(AsyncAudioVideoStreamHandler):
                 self.first_audio_emitted = True
 
             while not self.quit.is_set():
+                self._report_media_metrics()
                 chat_data = await self.client_session_delegate.get_data(EngineChannelType.AUDIO)
                 if chat_data is None or chat_data.data is None:
                     continue
@@ -184,6 +186,32 @@ class RtcStream(AsyncAudioVideoStreamHandler):
         except Exception as e:
             logger.opt(exception=e).error("Error in emit: ")
             raise
+
+    def _report_media_metrics(self):
+        now = time.monotonic()
+        if now - self._last_media_metrics < 5:
+            return
+        self._last_media_metrics = now
+        snapshot = getattr(self.client_session_delegate, "media_metrics", None)
+        if snapshot is None:
+            return
+        metrics = dict(event="rtc_queue_metrics", session=self.session_id,
+                       monotonic_s=now, **snapshot())
+        logger.info(json.dumps(metrics))
+        channel = self.chat_channel
+        loop = self.chat_channel_loop
+        if channel is None or loop is None or not loop.is_running():
+            return
+        def send():
+            if self.chat_channel is channel and channel.readyState == "open":
+                try:
+                    channel.send(json.dumps(dict(type="media_metrics", data=metrics)))
+                except Exception:
+                    logger.debug("Media metrics channel closed")
+        try:
+            loop.call_soon_threadsafe(send)
+        except RuntimeError:
+            pass
 
     async def video_emit(self) -> VideoEmitType:
         try:
