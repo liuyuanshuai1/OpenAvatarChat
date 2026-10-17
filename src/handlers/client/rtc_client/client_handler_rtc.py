@@ -80,19 +80,19 @@ def _configure_h264_hardware_encoding():
             )
         )
 
+        # Absorb small NVENC fluctuations, but still follow congestion-driven
+        # changes instead of keeping the initial bitrate for the entire call.
+        bitrate_reset_threshold = 0.25 if current_encoder == "h264_nvenc" else 0.1
         bitrate_changed = bool(
             self.codec
             and self.codec.bit_rate
             and abs(self.target_bitrate - self.codec.bit_rate)
-                / self.codec.bit_rate > 0.1
+                / self.codec.bit_rate > bitrate_reset_threshold
         )
 
         if self.codec and (
             resolution_changed
-            or (
-                current_encoder != "h264_nvenc"
-                and bitrate_changed
-            )
+            or bitrate_changed
         ):
             logger.info(
                 f"H.264 encoder reset: encoder={current_encoder}, "
