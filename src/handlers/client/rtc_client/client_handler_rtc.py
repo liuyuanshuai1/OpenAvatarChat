@@ -58,7 +58,6 @@ def _configure_h264_hardware_encoding():
             if encoder in encoder_options:
                 test_codec.options = encoder_options[encoder]
             test_codec.open()
-            test_codec.close()
             _selected_h264_encoder = encoder
             logger.info(f"Detected H.264 hardware encoder: {encoder}")
             break
@@ -70,10 +69,44 @@ def _configure_h264_hardware_encoding():
 
     def patched_encode_frame(self, frame, force_keyframe):
         global _selected_h264_encoder, _actual_h264_encoder
+        current_encoder = getattr(
+            self, "_preferred_encoder", _selected_h264_encoder
+        )
+
+        resolution_changed = bool(
+            self.codec and (
+                frame.width != self.codec.width
+                or frame.height != self.codec.height
+            )
+        )
+
+        # Absorb small NVENC fluctuations, but still follow congestion-driven
+        # changes instead of keeping the initial bitrate for the entire call.
+        bitrate_reset_threshold = 0.25 if current_encoder == "h264_nvenc" else 0.1
+        bitrate_changed = bool(
+            self.codec
+            and self.codec.bit_rate
+            and abs(self.target_bitrate - self.codec.bit_rate)
+                / self.codec.bit_rate > bitrate_reset_threshold
+        )
+
         if self.codec and (
-            frame.width != self.codec.width or frame.height != self.codec.height
-            or abs(self.target_bitrate - self.codec.bit_rate) / self.codec.bit_rate > 0.1
+            resolution_changed
+            or bitrate_changed
         ):
+            logger.info(
+                f"H.264 encoder reset: encoder={current_encoder}, "
+                f"resolution_changed={resolution_changed}, "
+                f"bitrate_changed={bitrate_changed}, "
+                f"target_bitrate={self.target_bitrate}, "
+                f"codec_bitrate={self.codec.bit_rate}"
+            )
+
+            try:
+                self.codec.close()
+            except Exception:
+                pass
+
             self.buffer_data = b""
             self.buffer_pts = None
             self.codec = None
