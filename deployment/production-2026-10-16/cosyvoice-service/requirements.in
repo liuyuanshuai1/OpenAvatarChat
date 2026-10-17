@@ -1,0 +1,8 @@
+vllm==0.11.0
+transformers==4.57.1
+numpy==1.26.4
+x-transformers==2.11.24
+wetext==0.0.4
+pydantic==2.11.7
+ray==2.48.0
+mistral-common==1.8.2
