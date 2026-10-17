@@ -198,7 +198,7 @@ class HandlerTTSRemote(HandlerBase):
             context.pending, self.config.min_text_chars, self.config.max_text_chars,
             final=inputs.is_last_data)
         for text in pieces:
-            logger.info('CosyVoice3 text queued: session={}, chars={}, text={}', context.session_id, len(text), text)
+            logger.info('CosyVoice3 text queued: session={}, chars={}', context.session_id, len(text))
             context.jobs.put((context.generation, text, time.monotonic()))
         if inputs.is_last_data:
             context.jobs.put((context.generation, None, time.monotonic()))
