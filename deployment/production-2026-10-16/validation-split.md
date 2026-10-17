@@ -33,3 +33,6 @@ node --test tests/regression/runtime-diagnostics.test.cjs
 ```
 
 此次拆分未修改服务器，也未重跑真实 GPU 模型推理、硬件编码性能、完整镜像构建或线上端到端验收。2026-10-16 的 SSH 复核曾超时，本次没有以重新访问服务器作为测试通过条件。
+
+
+以上为初次快照整理/拆分时的历史验证。最终审查补充修复和最新测试数量以 [final-review.md](final-review.md) 为准。

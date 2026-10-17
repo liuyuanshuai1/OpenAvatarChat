@@ -3,19 +3,18 @@
   "snapshot_commit": "5346f5c3129df102da73d610c2a98fc984f0de3e",
   "snapshot_date": "2026-10-16",
   "split_date": "2026-10-17",
+  "review_date": "2026-10-17",
+  "reviewed_adjustments": [
+    "src/handlers/client/rtc_client/client_handler_rtc.py",
+    "src/handlers/tts/cosyvoice3_remote/tts_handler_cosyvoice3_remote.py"
+  ],
   "live_recheck": "Original SSH attempt timed out; splitting did not change or revalidate the server.",
   "files": [
     {
       "path": ".gitignore",
-      "published_sha256": "1ebfc025ecf6194f98c236e117553bb2efa2883a9891f8f356572cc2436d40e9",
+      "published_sha256": "00b7bc0f4a7e7d40d85ac272535e22291c95e21c5fda636fd20d830657181b3c",
       "snapshot_path": ".gitignore",
-      "identical_to_snapshot": true
-    },
-    {
-      "path": "Dockerfile",
-      "published_sha256": "b93d943ca74560649627407b771e14a7f44f2a4ce9a0928f1c63bef9cba5d7da",
-      "snapshot_path": "Dockerfile",
-      "identical_to_snapshot": true
+      "identical_to_snapshot": false
     },
     {
       "path": "config/chat_local_cosyvoice3_vllm_flashhead_worker.example.yaml",
@@ -24,8 +23,14 @@
       "identical_to_snapshot": true
     },
     {
+      "path": "deployment/production-2026-10-16/Dockerfile.observed",
+      "published_sha256": "b93d943ca74560649627407b771e14a7f44f2a4ce9a0928f1c63bef9cba5d7da",
+      "snapshot_path": "Dockerfile",
+      "identical_to_snapshot": true
+    },
+    {
       "path": "deployment/production-2026-10-16/README.md",
-      "published_sha256": "3eef52f6713be0a891707bcd8215e36912652c23659c0145887916b19b073537",
+      "published_sha256": "ede706792e9dbd100f8057b11daad7d2e757783ba7347271f058d997c2624e29",
       "snapshot_path": "deployment/production-2026-10-16/README.md",
       "identical_to_snapshot": false
     },
@@ -40,6 +45,11 @@
       "published_sha256": "c2ac71ede1a251e99270d9e9c9aa991f72e602387c9579eb66817d5755ca1e85",
       "snapshot_path": "deployment/production-2026-10-16/cosyvoice-service/serve_avatar.py",
       "identical_to_snapshot": true
+    },
+    {
+      "path": "deployment/production-2026-10-16/final-review.md",
+      "published_sha256": "35c08dbd7505827fbf284cf245c38021c044c68ca392ca20adae3a96d274d486",
+      "origin": "Split publication verification"
     },
     {
       "path": "deployment/production-2026-10-16/frontend-overlay/index.html",
@@ -60,6 +70,11 @@
       "identical_to_snapshot": true
     },
     {
+      "path": "deployment/production-2026-10-16/review-validation.json",
+      "published_sha256": "40f7de0e5ccf951805504cdeb322c2f92b8ed7f2dd4c47dbddd9981caf154c64",
+      "origin": "Split publication verification"
+    },
+    {
       "path": "deployment/production-2026-10-16/run_docker_cuda128.sh",
       "published_sha256": "cdba70485db76040813ab6abdd7719be0feca1f340ad649c5350302eb7af4bf7",
       "snapshot_path": "run_docker_cuda128.sh",
@@ -67,7 +82,7 @@
     },
     {
       "path": "deployment/production-2026-10-16/split-verification.json",
-      "published_sha256": "4c2ee67ce52e56fae32b0a3872764b3c50d934aacbe872417eeae65f61bd0922",
+      "published_sha256": "3eeef6ffb65a0708802e8cc46220b7afefccf23ccf574c3d11803a04b0a6ae4d",
       "origin": "Split publication verification"
     },
     {
@@ -83,12 +98,12 @@
     },
     {
       "path": "deployment/production-2026-10-16/validation-split.md",
-      "published_sha256": "70cbd3c3aececd3a1bf474753ca86a3148433a5600468f807c619f7f6c926a22",
+      "published_sha256": "80b78f2b46cfb9c0a9fa1bc0bb76356351bc0f07697ce0a8f73477a718a8e97d",
       "origin": "Split publication verification"
     },
     {
       "path": "deployment/production-2026-10-16/validation.md",
-      "published_sha256": "14d2aa95ea8e4081568b30da7fc4fedd2c185457823a60305f212025d2fab67a",
+      "published_sha256": "dfbac03a12337920009815e48c1fe48b7ebefd0195950b12ddcff47adae965e0",
       "snapshot_path": "deployment/production-2026-10-16/validation.md",
       "identical_to_snapshot": false
     },
@@ -142,9 +157,9 @@
     },
     {
       "path": "src/handlers/client/rtc_client/client_handler_rtc.py",
-      "published_sha256": "bad60ba3388b517357e985ec0d8e1b48da44a15a23e5a11a53a91e4c1fb3d825",
+      "published_sha256": "2f9a949fb874a4ede3444f4fc242f15bb68bd73dcddaa00d2fa2df2e65d872c4",
       "snapshot_path": "src/handlers/client/rtc_client/client_handler_rtc.py",
-      "identical_to_snapshot": true
+      "identical_to_snapshot": false
     },
     {
       "path": "src/handlers/client/rtc_client/thread_safe_queue.py",
@@ -166,9 +181,9 @@
     },
     {
       "path": "src/handlers/tts/cosyvoice3_remote/tts_handler_cosyvoice3_remote.py",
-      "published_sha256": "2e470e669cc42ee5c28cea29b48998b96fba757bf2df3785d30ce92d5263e60b",
+      "published_sha256": "c031abd2a45f6ecd3e519628971eff3d859d5379e36950db3ba26ee1b1280286",
       "snapshot_path": "src/handlers/tts/cosyvoice3_remote/tts_handler_cosyvoice3_remote.py",
-      "identical_to_snapshot": true
+      "identical_to_snapshot": false
     },
     {
       "path": "src/service/rtc_service/rtc_stream.py",
@@ -187,6 +202,11 @@
       "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
     },
     {
+      "path": "tests/regression/test_cosyvoice3_privacy.py",
+      "published_sha256": "01381293b4b9fc28ef067677b6fac92abd66e282e1987d7b98fd0fce16329914",
+      "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
+    },
+    {
       "path": "tests/regression/test_flashhead_runtime.py",
       "published_sha256": "1400ac8249ecc07706881836911fcddf5bc791f45930a6c33fe25bfc3ccec879",
       "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
@@ -194,6 +214,11 @@
     {
       "path": "tests/regression/test_media_metrics.py",
       "published_sha256": "d7617690a8df2eb0892d02785ea36febd67746292759e82cd1de393f3c4f8617",
+      "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
+    },
+    {
+      "path": "tests/regression/test_rtc_encoder.py",
+      "published_sha256": "48cada2b896be738a3b6624fa2ac9b1bd2950cd4ea261e8e1ac77e9a10db8fed",
       "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
     },
     {
@@ -205,12 +230,6 @@
       "path": "tests/regression/test_thread_safe_queue.py",
       "published_sha256": "2100a9cb34cc1ad4199ff405869d2b454d677ae05abcf5366c72099de7ba2a9b",
       "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
-    },
-    {
-      "path": "wheelhouse/.gitkeep",
-      "published_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "snapshot_path": "wheelhouse/.gitkeep",
-      "identical_to_snapshot": true
     }
   ]
 }

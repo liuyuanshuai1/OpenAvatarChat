@@ -1,0 +1,104 @@
+{
+  "date": "2026-10-17",
+  "python_cpu_tests_passed": 42,
+  "browser_diagnostic_tests_passed": 3,
+  "stages": [
+    {
+      "stage": 1,
+      "changed_python_syntax": "passed",
+      "patch_whitespace": "passed"
+    },
+    {
+      "stage": 2,
+      "changed_python_syntax": "passed",
+      "patch_whitespace": "passed"
+    },
+    {
+      "stage": 3,
+      "changed_python_syntax": "passed",
+      "patch_whitespace": "passed",
+      "cpu_tests_passed": 5
+    },
+    {
+      "stage": 4,
+      "changed_python_syntax": "passed",
+      "patch_whitespace": "passed",
+      "cpu_tests_passed": 4
+    },
+    {
+      "stage": 5,
+      "changed_python_syntax": "passed",
+      "patch_whitespace": "passed",
+      "cpu_tests_passed": 27
+    },
+    {
+      "stage": 6,
+      "changed_python_syntax": "passed",
+      "patch_whitespace": "passed",
+      "cpu_tests_passed": 4
+    },
+    {
+      "stage": 7,
+      "changed_python_syntax": "passed",
+      "patch_whitespace": "passed",
+      "cpu_tests_passed": 2,
+      "browser_tests_passed": 3
+    },
+    {
+      "stage": 8,
+      "changed_python_syntax": "passed",
+      "patch_whitespace": "passed",
+      "launcher_shell_syntax": "passed"
+    }
+  ],
+  "merge_simulation": {
+    "strategy": "Sequential merge commits, retargeting the next PR to main after each merge.",
+    "stages": [
+      {
+        "stage": 1,
+        "conflicts": 0,
+        "merged_tree_matches_pr_head": true
+      },
+      {
+        "stage": 2,
+        "conflicts": 0,
+        "merged_tree_matches_pr_head": true
+      },
+      {
+        "stage": 3,
+        "conflicts": 0,
+        "merged_tree_matches_pr_head": true
+      },
+      {
+        "stage": 4,
+        "conflicts": 0,
+        "merged_tree_matches_pr_head": true
+      },
+      {
+        "stage": 5,
+        "conflicts": 0,
+        "merged_tree_matches_pr_head": true
+      },
+      {
+        "stage": 6,
+        "conflicts": 0,
+        "merged_tree_matches_pr_head": true
+      },
+      {
+        "stage": 7,
+        "conflicts": 0,
+        "merged_tree_matches_pr_head": true
+      },
+      {
+        "stage": 8,
+        "conflicts": 0,
+        "merged_tree_matches_pr_head": true
+      }
+    ],
+    "all_passed": true
+  },
+  "limitations": [
+    "No real GPU/model inference or production end-to-end validation was repeated.",
+    "CPU test environment differs from the production Linux environment."
+  ]
+}

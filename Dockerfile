@@ -23,8 +23,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # =============================================================================
 # Use Tsinghua University mirrors for faster package downloads in China
 # Install latest Python 3.11.x and essential system libraries for the application
-RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
-    sed -i 's/security.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
+RUN sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list && \
+    sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa && \
@@ -81,7 +81,6 @@ WORKDIR $WORK_DIR
 # code-only changes do not invalidate the expensive dependency layer.
 COPY ./install.py $WORK_DIR/install.py
 COPY ./pyproject.toml $WORK_DIR/pyproject.toml
-COPY ./wheelhouse $WORK_DIR/wheelhouse
 COPY ./src/__init__.py $WORK_DIR/src/__init__.py
 COPY ./src/engine_utils $WORK_DIR/src/engine_utils
 COPY ./src/handlers/tts/edgetts/pyproject.toml $WORK_DIR/src/handlers/tts/edgetts/pyproject.toml
@@ -103,13 +102,7 @@ RUN pip install --no-cache-dir uv && \
 
 # Install all dependencies via install.py (handles version conflict
 # resolution, flash-attn compilation, etc. automatically)
-# RUN uv run install.py --all
-RUN --mount=type=cache,target=/root/.cache/uv \
-    UV_DEFAULT_INDEX=https://mirrors.aliyun.com/pypi/simple/ \
-    UV_CONCURRENT_DOWNLOADS=2 \
-    UV_HTTP_RETRIES=10 \
-    UV_HTTP_TIMEOUT=300 \
-    uv run install.py --all
+RUN uv run install.py --all
 
 # Replace onnxruntime with GPU variant (Docker-specific, needs CUDA runtime)
 RUN uv pip uninstall onnxruntime onnxruntime-gpu; \

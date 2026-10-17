@@ -63,5 +63,4 @@ tmux-client-*.log
 /config/*production*.yaml
 /config/chat_local_cosyvoice3_vllm_flashhead_worker.yaml
 *.before-*.bak
-/wheelhouse/*
-!/wheelhouse/.gitkeep
+/wheelhouse/

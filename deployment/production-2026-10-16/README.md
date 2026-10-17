@@ -16,7 +16,7 @@
 | 前端诊断 | `?diagnostics=1` 开启 WebRTC 接收/解码/缓冲与视频呈现诊断、标记及导出 | 本目录 `frontend-overlay/` |
 | LLM | 请求超时从 5 秒改为 30 秒；此处采用容器有效版本，原工作目录仍是旧值 | `src/handlers/llm/openai_compatible/llm_handler_openai_compatible.py` |
 | 旧 CV2 适配 | 将位置参数 `True` 改为显式 `stream=True` | `src/handlers/tts/cosyvoice/cosyvoice_processor.py` |
-| Docker | 镜像源调整、uv 下载重试/超时参数、wheelhouse 构建目录、GPU/共享内存及 worker 启动配置 | `Dockerfile`、本目录 `run_docker_cuda128.sh` |
+| Docker | 镜像源调整、uv 下载重试/超时参数、wheelhouse 构建目录、GPU/共享内存及 worker 启动配置 | 本目录 `Dockerfile.observed`、`run_docker_cuda128.sh` |
 | 验证与说明 | 已有取消、队列、worker、音视频配对及诊断回归测试，双语 FlashHead 文档 | `tests/regression/`、`docs/` |
 
 `cancelled = False` 在上游基准中已存在，未把它列为本次新增修复。修改范围同时包括此前部署修复与最近三项修复，不能把所有改动都归为最后一轮。
@@ -25,7 +25,7 @@
 
 配置模板为 `config/chat_local_cosyvoice3_vllm_flashhead_worker.example.yaml`。使用前复制为不含 `.example` 的文件，填写自己的 LLM 地址和凭据，并准备模型、角色图片、证书与独立 TTS 服务。模板保留当时的性能参数：单会话、25 FPS、24 kHz 输出、process 模式、compile 开启、2 秒 FlashHead 缓冲。本目录的服务器专用启动脚本默认选择复制后的配置；从仓库根目录执行 `bash deployment/production-2026-10-16/run_docker_cuda128.sh`。项目根目录的通用启动脚本保留上游行为。
 
-运行树包含历史临时安装、挂载覆盖和直接注入的前端 dist；本分支没有完整 Docker 镜像、模型或离线依赖。`Dockerfile` 与启动脚本保留已观察到的构建/部署差异，**不能据此宣称从零构建即可复现当时镜像**。脚本使用的镜像标签需要自行构建或替换。`wheelhouse/.gitkeep` 只保留构建目录；没有上传二进制 wheels。
+运行树包含历史临时安装、挂载覆盖和直接注入的前端 dist；本分支没有完整 Docker 镜像、模型或离线依赖。本目录 `Dockerfile.observed` 与启动脚本保留已观察到的构建/部署差异，**不能据此宣称从零构建即可复现当时镜像**。脚本使用的镜像标签需要自行构建或替换。`Dockerfile.observed` 只作服务器历史记录，其中 wheelhouse 依赖未发布；不要把它直接当作可复现构建入口。项目根目录的 Dockerfile 保留上游内容，没有上传二进制 wheels 或空目录占位。
 
 `oac-installed.txt` 和 `tts-installed.txt` 只保留可公开的版本 pin，剔除了本机路径和 URL 安装项，是环境观察记录，不是新的 lockfile。`cosyvoice-service/requirements.in` 是历史加速依赖增量，独立 TTS 还需要 CosyVoice 源码、模型、wetext 资源及正确的容器环境，不能单凭这个文件启动。
 
@@ -56,4 +56,7 @@
 
 原汇总分支保留为脱敏快照参照。修改按 CV2 兼容、LLM 超时、RTC 编码、RTC 队列、FlashHead、CV3、诊断、部署记录分成八个顺序 PR。每个 PR 的 base 是前一个功能分支，页面只显示本层新增差异；顺序表示审查/合并流程，不代表全部模块都有运行依赖。合并时从第一项开始，上项合入 main 后将下一项 base 改为 main，并保持原分支历史，避免重复差异。
 
-相比原汇总分支，运行源码最终内容不变。测试按模块重组到 `tests/regression/`，原测试函数全部保留；服务器专用启动脚本移到本目录，根目录通用脚本恢复上游版本。诊断消费代码在第七项引入，队列快照 API 和内部计数保留在各自实现中。
+初次拆分时，运行源码与原汇总分支一致。最终审查又修正了 NVENC 大幅码率变化处理和 CV3 正文日志，详见 `final-review.md`；这些修正只在 GitHub 分支中，未部署到服务器。测试按模块重组到 `tests/regression/`，原测试函数全部保留；服务器专用启动脚本移到本目录，根目录通用脚本恢复上游版本。诊断消费代码在第七项引入，队列快照 API 和内部计数保留在各自实现中。
+
+
+最终合并前审查与当前验证结果见 [final-review.md](final-review.md)。保留历史版本的验证记录不代表当前服务器已重新验收。

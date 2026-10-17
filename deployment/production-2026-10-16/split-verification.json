@@ -1,5 +1,10 @@
 {
-  "runtime_source_files_unchanged": 12,
+  "runtime_source_files_unchanged": 10,
+  "reviewed_adjustments": [
+    "src/handlers/client/rtc_client/client_handler_rtc.py",
+    "src/handlers/tts/cosyvoice3_remote/tts_handler_cosyvoice3_remote.py"
+  ],
+  "generic_dockerfile": "Restored to upstream baseline",
   "existing_python_test_functions_preserved": 25,
   "browser_test_file_unchanged": true,
   "server_launcher": "Moved without content changes into deployment/production-2026-10-16/",
