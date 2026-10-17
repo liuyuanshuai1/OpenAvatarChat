@@ -290,9 +290,11 @@ class RtcClientSessionDelegate(ClientSessionDelegate):
         self.data_submitter = None
         self.signal_emitter = None
         self.shared_states = None
+        self.video_fps = 25
+        self.queue_timeouts = {"audio": 0, "video": 0, "text": 0}
         self.output_queues = {
-            EngineChannelType.AUDIO: ThreadSafeAsyncQueue(),
-            EngineChannelType.VIDEO: ThreadSafeAsyncQueue(),
+            EngineChannelType.AUDIO: ThreadSafeAsyncQueue(self._audio_duration),
+            EngineChannelType.VIDEO: ThreadSafeAsyncQueue(self._video_duration),
             EngineChannelType.TEXT: ThreadSafeAsyncQueue(),
         }
         self.input_data_definitions: Dict[EngineChannelType, DataBundleDefinition] = {}
@@ -310,13 +312,29 @@ class RtcClientSessionDelegate(ClientSessionDelegate):
             try:
                 data = await asyncio.wait_for(data_queue.get(), timeout)
             except asyncio.TimeoutError:
+                self.queue_timeouts[modality.value] += 1
                 return None
         else:
             data = await data_queue.get()
         return data
 
+    @staticmethod
+    def _audio_duration(item):
+        if getattr(item, "data", None) is None:
+            return 0.0
+        array = item.data.get_main_data()
+        rate = item.data.get_main_definition_entry().sample_rate
+        return array.shape[-1] / rate if array is not None and rate else 0.0
 
+    def _video_duration(self, item):
+        if getattr(item, "data", None) is None:
+            return 0.0
+        array = item.data.get_main_data()
+        return (array.shape[0] if array is not None and array.ndim == 4 else 1) / self.video_fps
 
+    def media_metrics(self):
+        return dict(queues={kind.value: q.snapshot() for kind, q in self.output_queues.items()},
+                    timeouts=dict(self.queue_timeouts))
 
     def put_data(self, modality: EngineChannelType, data: Union[np.ndarray, str],
                  timestamp: Optional[Tuple[int, int]] = None, samplerate: Optional[int] = None, loopback: bool = False):
@@ -498,6 +516,7 @@ class ClientHandlerRtc(ClientHandlerBase):
         session_delegate.signal_emitter = handler_context.signal_emitter
         session_delegate.input_data_definitions = self.output_bundle_definitions
         session_delegate.shared_states = session_context.shared_states
+        session_delegate.video_fps = handler_context.config.output_video_fps
 
         handler_context.client_session_delegate = session_delegate
 

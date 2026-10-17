@@ -20,6 +20,7 @@ import cv2
 import numpy as np
 import torch
 from loguru import logger
+from engine_utils.media_metrics import input_queue_metrics
 
 
 @dataclass
@@ -294,6 +295,12 @@ class FlashHeadProcessor:
             ), generation):
                 return
 
+        logger.info(json.dumps(dict(
+            event="flashhead_batch", speech_id=speech_id, generation=generation,
+            produce_ms=round(dur_ms, 3), lock_wait_ms=round(lock_wait * 1000, 3),
+            enqueue_ms=round((time.monotonic() - t_start) * 1000 - dur_ms, 3),
+            queue_seconds=round(self._output_queue.qsize() / self.tgt_fps, 3),
+        )))
 
     def _idle_inference_worker(self):
         """Background thread: generates idle animation frames with silent audio.
@@ -478,9 +485,26 @@ class FlashHeadProcessor:
                             self.callbacks.on_speech_end(item.speech_id)
 
             frame_id += 1
+            if time.monotonic() - self._last_metrics >= 5:
+                self._last_metrics = time.monotonic()
+                logger.info(json.dumps(dict(event="flashhead_metrics", **self.runtime_metrics())))
 
         logger.info("FlashHead frame collector stopped")
 
+    def runtime_metrics(self):
+        with self._lock:
+            times = list(self._batch_times)
+            provider = getattr(self, 'input_queue_provider', None)
+            return dict(input_queue=input_queue_metrics(provider()) if provider else None,
+                        queue_frames=self._output_queue.qsize(),
+                        queue_seconds=round(self._output_queue.qsize() / self.tgt_fps, 3),
+                        queue_peak_frames=self._queue_peak,
+                        pending_audio_seconds=round(len(self._pending_audio) / self.sample_rate, 3),
+                        speech_starvation_ticks=self._starvation_ticks,
+                        speech_starvation_seconds=round(self._starvation_ticks / self.tgt_fps, 3),
+                        produce_batches=len(times),
+                        produce_p95_ms=round(float(np.percentile(times, 95)), 3) if times else None,
+                        generation=self._generation)
 
     def _enqueue(self, item: FrameQueueItem, generation: int) -> bool:
         """Backpressure video/audio as one unit; cancel/stop never wait for space."""
