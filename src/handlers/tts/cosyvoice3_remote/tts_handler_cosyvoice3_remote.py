@@ -224,6 +224,9 @@ class HandlerTTSRemote(HandlerBase):
                 if text is None:
                     self._emit(context, generation, np.zeros(240, dtype=np.float32), finish=True)
                     continue
+                logger.info(json.dumps(dict(event="tts_job_start", session=context.session_id,
+                                            queue_wait_ms=round((time.monotonic()-queued)*1000, 3),
+                                            pending_jobs=context.jobs.qsize(), generation=generation)))
                 request_id = uuid.uuid4().hex
                 with context.state_lock:
                     if generation != context.generation or context.stop.is_set():

@@ -54,6 +54,7 @@ class ChatSession:
         input_queue = handler_env.input_queue
         handler = handler_env.handler
         context = handler_env.context
+        context.diagnostic_input_queue = input_queue
         output_info = handler_env.output_info
         # Use handler_output_info (with original type keys) if available,
         # so handler code can use its declared types even with output_type_override
