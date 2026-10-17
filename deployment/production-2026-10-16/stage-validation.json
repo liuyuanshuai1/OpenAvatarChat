@@ -1,0 +1,49 @@
+[
+  {
+    "stage": 1,
+    "changed_python_syntax": "passed",
+    "patch_whitespace": "passed"
+  },
+  {
+    "stage": 2,
+    "changed_python_syntax": "passed",
+    "patch_whitespace": "passed"
+  },
+  {
+    "stage": 3,
+    "changed_python_syntax": "passed",
+    "patch_whitespace": "passed",
+    "rtc_encoder_import": "passed"
+  },
+  {
+    "stage": 4,
+    "changed_python_syntax": "passed",
+    "patch_whitespace": "passed",
+    "cpu_tests_passed": 4
+  },
+  {
+    "stage": 5,
+    "changed_python_syntax": "passed",
+    "patch_whitespace": "passed",
+    "cpu_tests_passed": 27
+  },
+  {
+    "stage": 6,
+    "changed_python_syntax": "passed",
+    "patch_whitespace": "passed",
+    "cpu_tests_passed": 3
+  },
+  {
+    "stage": 7,
+    "changed_python_syntax": "passed",
+    "patch_whitespace": "passed",
+    "cpu_tests_passed": 2,
+    "browser_tests_passed": 3
+  },
+  {
+    "stage": 8,
+    "changed_python_syntax": "passed",
+    "patch_whitespace": "passed",
+    "launcher_shell_syntax": "passed"
+  }
+]

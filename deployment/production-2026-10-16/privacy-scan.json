@@ -1,0 +1,6 @@
+{
+  "intermediate_prs_scanned": 8,
+  "distinct_file_versions_scanned": 44,
+  "findings": [],
+  "scope": "Changed text files in each commit plus final publication files; upstream history excluded."
+}

@@ -1,0 +1,7 @@
+{
+  "runtime_source_files_unchanged": 12,
+  "existing_python_test_functions_preserved": 25,
+  "browser_test_file_unchanged": true,
+  "server_launcher": "Moved without content changes into deployment/production-2026-10-16/",
+  "generic_launcher": "Restored to upstream baseline"
+}
