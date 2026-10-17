@@ -1,0 +1,235 @@
+{
+  "baseline_commit": "8b7b3b45bca28ae9ab5fa72ee31bc03c5a99b08b",
+  "snapshot_commit": "5346f5c3129df102da73d610c2a98fc984f0de3e",
+  "snapshot_date": "2026-10-16",
+  "split_date": "2026-10-17",
+  "review_date": "2026-10-17",
+  "reviewed_adjustments": [
+    "src/handlers/client/rtc_client/client_handler_rtc.py",
+    "src/handlers/tts/cosyvoice3_remote/tts_handler_cosyvoice3_remote.py"
+  ],
+  "live_recheck": "Original SSH attempt timed out; splitting did not change or revalidate the server.",
+  "files": [
+    {
+      "path": ".gitignore",
+      "published_sha256": "00b7bc0f4a7e7d40d85ac272535e22291c95e21c5fda636fd20d830657181b3c",
+      "snapshot_path": ".gitignore",
+      "identical_to_snapshot": false
+    },
+    {
+      "path": "config/chat_local_cosyvoice3_vllm_flashhead_worker.example.yaml",
+      "published_sha256": "457ef1a1034c32294b3f6767b34a6ea5dec730c160a46254479c7aae661f8d90",
+      "snapshot_path": "config/chat_local_cosyvoice3_vllm_flashhead_worker.example.yaml",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "deployment/production-2026-10-16/Dockerfile.observed",
+      "published_sha256": "b93d943ca74560649627407b771e14a7f44f2a4ce9a0928f1c63bef9cba5d7da",
+      "snapshot_path": "Dockerfile",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "deployment/production-2026-10-16/README.md",
+      "published_sha256": "ede706792e9dbd100f8057b11daad7d2e757783ba7347271f058d997c2624e29",
+      "snapshot_path": "deployment/production-2026-10-16/README.md",
+      "identical_to_snapshot": false
+    },
+    {
+      "path": "deployment/production-2026-10-16/cosyvoice-service/requirements.in",
+      "published_sha256": "25f80a8515951f0393089c80d7036195074c88ff005147875cd2929bfd22fa88",
+      "snapshot_path": "deployment/production-2026-10-16/cosyvoice-service/requirements.in",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "deployment/production-2026-10-16/cosyvoice-service/serve_avatar.py",
+      "published_sha256": "c2ac71ede1a251e99270d9e9c9aa991f72e602387c9579eb66817d5755ca1e85",
+      "snapshot_path": "deployment/production-2026-10-16/cosyvoice-service/serve_avatar.py",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "deployment/production-2026-10-16/final-review.md",
+      "published_sha256": "35c08dbd7505827fbf284cf245c38021c044c68ca392ca20adae3a96d274d486",
+      "origin": "Split publication verification"
+    },
+    {
+      "path": "deployment/production-2026-10-16/frontend-overlay/index.html",
+      "published_sha256": "a3ad4b9e51ad4ff50fbca73f985bf21fd7a1262c21a09291fd45402347563a64",
+      "snapshot_path": "deployment/production-2026-10-16/frontend-overlay/index.html",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "deployment/production-2026-10-16/frontend-overlay/runtime-diagnostics.js",
+      "published_sha256": "300b28930f79a2bdd79301a45a1eb7510e352826abbae702071e8dbc3d740a82",
+      "snapshot_path": "deployment/production-2026-10-16/frontend-overlay/runtime-diagnostics.js",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "deployment/production-2026-10-16/oac-installed.txt",
+      "published_sha256": "c1fcacef6d0c8fadf6cc17d94ca97c42c8e082f7286901ba628c51de527da3c9",
+      "snapshot_path": "deployment/production-2026-10-16/oac-installed.txt",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "deployment/production-2026-10-16/review-validation.json",
+      "published_sha256": "40f7de0e5ccf951805504cdeb322c2f92b8ed7f2dd4c47dbddd9981caf154c64",
+      "origin": "Split publication verification"
+    },
+    {
+      "path": "deployment/production-2026-10-16/run_docker_cuda128.sh",
+      "published_sha256": "cdba70485db76040813ab6abdd7719be0feca1f340ad649c5350302eb7af4bf7",
+      "snapshot_path": "run_docker_cuda128.sh",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "deployment/production-2026-10-16/split-verification.json",
+      "published_sha256": "3eeef6ffb65a0708802e8cc46220b7afefccf23ccf574c3d11803a04b0a6ae4d",
+      "origin": "Split publication verification"
+    },
+    {
+      "path": "deployment/production-2026-10-16/stage-validation.json",
+      "published_sha256": "ea3eb7195e0f23a0ffb69633d7efdbb984a397aad25dd7635a26c403b5947c5a",
+      "origin": "Split publication verification"
+    },
+    {
+      "path": "deployment/production-2026-10-16/tts-installed.txt",
+      "published_sha256": "62e3bbfb9785d67cdf9891637b7013d6a727f7d95604c6add3ff08ca306ef8e5",
+      "snapshot_path": "deployment/production-2026-10-16/tts-installed.txt",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "deployment/production-2026-10-16/validation-split.md",
+      "published_sha256": "80b78f2b46cfb9c0a9fa1bc0bb76356351bc0f07697ce0a8f73477a718a8e97d",
+      "origin": "Split publication verification"
+    },
+    {
+      "path": "deployment/production-2026-10-16/validation.md",
+      "published_sha256": "dfbac03a12337920009815e48c1fe48b7ebefd0195950b12ddcff47adae965e0",
+      "snapshot_path": "deployment/production-2026-10-16/validation.md",
+      "identical_to_snapshot": false
+    },
+    {
+      "path": "docs/en/reference/handlers/avatar/flashhead.md",
+      "published_sha256": "512d657ed5b242c9ce058b22feca15a3051955ee28a5a98bf997ace6a13aafe9",
+      "snapshot_path": "docs/en/reference/handlers/avatar/flashhead.md",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "docs/reference/handlers/avatar/flashhead.md",
+      "published_sha256": "287e138d64c6899f19b64f21d14d5e26a3053589efe3b9f5310b02c05d081430",
+      "snapshot_path": "docs/reference/handlers/avatar/flashhead.md",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "src/chat_engine/core/chat_session.py",
+      "published_sha256": "be1eb142c216d650e21c56e2f09f10421f862db6ce68b348baf0e44aac2a1601",
+      "snapshot_path": "src/chat_engine/core/chat_session.py",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "src/engine_utils/media_metrics.py",
+      "published_sha256": "45d5d92376dd97f21785508896dba01ddefd0cd7bf5071a6f80f865ad6b72cf7",
+      "snapshot_path": "src/engine_utils/media_metrics.py",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "src/handlers/avatar/flashhead/avatar_handler_flashhead.py",
+      "published_sha256": "22c41cf46ef60e8aa73d37201f0491ecd68a74f15e0c58f301238a5cef8c3901",
+      "snapshot_path": "src/handlers/avatar/flashhead/avatar_handler_flashhead.py",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "src/handlers/avatar/flashhead/flashhead_config.py",
+      "published_sha256": "aa7d4124590e3987ba0e87ee4d8d489135062d3517cacd5a3d6ca2b718b47c5e",
+      "snapshot_path": "src/handlers/avatar/flashhead/flashhead_config.py",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "src/handlers/avatar/flashhead/flashhead_processor.py",
+      "published_sha256": "aade48834505f5e6e263bdbe85e5dacd7ea30fc0af080a2eba94b915461d364a",
+      "snapshot_path": "src/handlers/avatar/flashhead/flashhead_processor.py",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "src/handlers/avatar/flashhead/flashhead_worker.py",
+      "published_sha256": "464d10f7be21857507d131b9f139c9f58ac85783305b576a19a27eda71b5d981",
+      "snapshot_path": "src/handlers/avatar/flashhead/flashhead_worker.py",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "src/handlers/client/rtc_client/client_handler_rtc.py",
+      "published_sha256": "2f9a949fb874a4ede3444f4fc242f15bb68bd73dcddaa00d2fa2df2e65d872c4",
+      "snapshot_path": "src/handlers/client/rtc_client/client_handler_rtc.py",
+      "identical_to_snapshot": false
+    },
+    {
+      "path": "src/handlers/client/rtc_client/thread_safe_queue.py",
+      "published_sha256": "edfcf3ca1c83a417e190dc7cd14d3525b29b9dfe5a9f77ff55840551fa5061cb",
+      "snapshot_path": "src/handlers/client/rtc_client/thread_safe_queue.py",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "src/handlers/llm/openai_compatible/llm_handler_openai_compatible.py",
+      "published_sha256": "f0af5d95a2057d0f2320121d69bd4b82fbd2b37ce00ebe063cc71af3c5a972f7",
+      "snapshot_path": "src/handlers/llm/openai_compatible/llm_handler_openai_compatible.py",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "src/handlers/tts/cosyvoice/cosyvoice_processor.py",
+      "published_sha256": "7686064eaa3ed7f46cf59f902f2370cc9cd0aff0f9b87ddbed52c2a6fc526d0c",
+      "snapshot_path": "src/handlers/tts/cosyvoice/cosyvoice_processor.py",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "src/handlers/tts/cosyvoice3_remote/tts_handler_cosyvoice3_remote.py",
+      "published_sha256": "c031abd2a45f6ecd3e519628971eff3d859d5379e36950db3ba26ee1b1280286",
+      "snapshot_path": "src/handlers/tts/cosyvoice3_remote/tts_handler_cosyvoice3_remote.py",
+      "identical_to_snapshot": false
+    },
+    {
+      "path": "src/service/rtc_service/rtc_stream.py",
+      "published_sha256": "fb3bd28efa0b96d1f2b3c9ba43a24bf1fdc373fd06551e585dc55d2a72ea82a0",
+      "snapshot_path": "src/service/rtc_service/rtc_stream.py",
+      "identical_to_snapshot": true
+    },
+    {
+      "path": "tests/regression/runtime-diagnostics.test.cjs",
+      "published_sha256": "f773fe71fe1040303661be6cfb042e3c74a421f3abb3240c22319e30db5c7a30",
+      "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
+    },
+    {
+      "path": "tests/regression/test_cosyvoice3_cancel.py",
+      "published_sha256": "ffae58f5cf04bf3e835c2f955a3b8d09476cb2fa5851e7b5d405d54618e43c6d",
+      "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
+    },
+    {
+      "path": "tests/regression/test_cosyvoice3_privacy.py",
+      "published_sha256": "01381293b4b9fc28ef067677b6fac92abd66e282e1987d7b98fd0fce16329914",
+      "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
+    },
+    {
+      "path": "tests/regression/test_flashhead_runtime.py",
+      "published_sha256": "1400ac8249ecc07706881836911fcddf5bc791f45930a6c33fe25bfc3ccec879",
+      "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
+    },
+    {
+      "path": "tests/regression/test_media_metrics.py",
+      "published_sha256": "d7617690a8df2eb0892d02785ea36febd67746292759e82cd1de393f3c4f8617",
+      "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
+    },
+    {
+      "path": "tests/regression/test_rtc_encoder.py",
+      "published_sha256": "48cada2b896be738a3b6624fa2ac9b1bd2950cd4ea261e8e1ac77e9a10db8fed",
+      "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
+    },
+    {
+      "path": "tests/regression/test_rtc_lifecycle.py",
+      "published_sha256": "778a0957c59598805830ce175951ca6b6b147a7a9e0eb036fd2cdfb9f22ff4b6",
+      "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
+    },
+    {
+      "path": "tests/regression/test_thread_safe_queue.py",
+      "published_sha256": "2100a9cb34cc1ad4199ff405869d2b454d677ae05abcf5366c72099de7ba2a9b",
+      "origin": "Existing regression tests reorganized by module; all Python test functions preserved."
+    }
+  ]
+}

@@ -56,3 +56,11 @@ tests/**/outputs/
 
 # tmux session logs
 tmux-client-*.log
+
+# Private deployment state and generated artifacts
+/snapshots/
+/reports/
+/config/*production*.yaml
+/config/chat_local_cosyvoice3_vllm_flashhead_worker.yaml
+*.before-*.bak
+/wheelhouse/
